@@ -2597,7 +2597,8 @@ class CellObject(object):
       "name_type",
       "original_cellobject",
       "parent_object",
-      "root"
+      "root",
+      "rootkey" # TL: Added rootkey element
     ])
 
     _diff_attr_names = {
@@ -2744,7 +2745,10 @@ class CellObject(object):
                 self.parent_object.populate_from_Element(ce)
             # TL: Added app_state to be populated
             elif ctn == "app_state":
-                self.app_state = ce.text                  
+                self.app_state = ce.text
+            # TL: Added rootkey to be populated
+            elif ctn == "rootkey":
+                self.rootkey = ce.text                                 
             else:
                 if (cns, ctn) not in _warned_elements:
                     _warned_elements.add((cns, ctn))
@@ -2838,6 +2842,7 @@ class CellObject(object):
         _append_str("data_raw", self.data_raw) # TL: Added data_raw to XML out
         _append_str("app_name", self.app_name) # TL: Added app_name to XML out
         _append_str("app_state", self.app_state) # TL: Added app_state to XML out
+        _append_str("rootkey", self.rootkey) # TL: Added rootkey to XML out
         
         #The experimental conversions element needs its own code
         if not self.data_conversions is None or "data_conversions" in diffs_whittle_set:
@@ -3131,6 +3136,16 @@ class CellObject(object):
     @root.setter
     def root(self, val):
         self._root = _boolcast(val)
+        
+    # TL: Added rootkey property getter
+    @property
+    def rootkey(self):
+        return self._rootkey
+
+    # TL: Added rootkey property setter
+    @rootkey.setter
+    def rootkey(self, val):
+        self._rootkey = _strcast(val)            
 
 def iterparse(filename, events=("start","end"), **kwargs):
     """

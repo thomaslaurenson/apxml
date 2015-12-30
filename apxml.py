@@ -41,6 +41,15 @@ import collections
 import xml.etree.ElementTree as ET
 
 try:
+    import dfxml
+except ImportError:
+    print("Error: apxml.py")
+    print("       The dfxml.py module is required to run this script")
+    print("       You can download from: https://github.com/simsong/dfxml")
+    print("       Now Exiting...")
+    sys.exit(1)
+
+try:
     import Objects
 except ImportError:
     print("Error: apxml.py")
