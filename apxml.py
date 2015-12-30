@@ -519,8 +519,6 @@ def generate_stats(apxml_obj):
     if not isinstance(apxml_obj, APXMLObject):
         return
         
-    print(apxml_obj._all_states)
-        
     # Create an object to hold stats information
     apxml_obj.stats = StatisticsObject()
     
