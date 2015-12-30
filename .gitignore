@@ -55,3 +55,6 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# WORKING DIR TO IGNORE
+WIP/
