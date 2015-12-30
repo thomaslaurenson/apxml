@@ -1585,6 +1585,7 @@ class FileObject(object):
       "app_state", # TL: Added app_state property
       "atime",
       "basename", # TL: Added basename property
+      "basename_norm", # TL: Added basename_norm property
       "bkup_time",
       "byte_runs",
       "compressed",
@@ -2035,6 +2036,7 @@ class FileObject(object):
         _append_str("filename", self.filename)
         _append_str("filename_norm", self.filename_norm) # TL: Added filename_norm to XML out                
         _append_str("basename", self.basename) # TL: Added basename to XML out
+        _append_str("basename_norm", self.basename_norm) # TL: Added basename_norm to XML out
         _append_str("error", self.error)
         _append_str("partition", self.partition)
         _append_str("id", self.id)
@@ -2171,7 +2173,17 @@ class FileObject(object):
     # TL: Added basename property setter
     @basename.setter
     def basename(self, val):
-        self._basename = _strcast(val)  
+        self._basename = _strcast(val)
+        
+    # TL: Added basename_norm property getter
+    @property
+    def basename_norm(self):
+        return self._basename_norm
+
+    # TL: Added basename_norm property setter
+    @basename_norm.setter
+    def basename_norm(self, val):
+        self._basename_norm = _strcast(val)            
 
     @property
     def bkup_time(self):
