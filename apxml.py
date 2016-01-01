@@ -206,6 +206,10 @@ class APXMLObject(object):
         tmpel0 = self.creator.to_Element()
         outel.append(tmpel0)
 
+        # Write FileObjects and CellObjects to APXML document
+        
+            
+
         # Append life cycle phases?!
         # Append FileObjects
         # Append CellObjects
@@ -213,12 +217,11 @@ class APXMLObject(object):
         tmpel1 = self.objs_to_Element("open")
         tmpel2 = self.objs_to_Element("close")
         tmpel3 = self.objs_to_Element("uninstall")
-        tmpel4 = self.objs_to_Element("reboot")
+
         outel.append(tmpel0)
         outel.append(tmpel1)
         outel.append(tmpel2)
         outel.append(tmpel3)
-        outel.append(tmpel4)
 
         # Set Rusage element
         tmpel0 = self.rusage.to_Element()
