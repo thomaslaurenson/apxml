@@ -82,7 +82,8 @@ except ImportError:
     print('       You can download from: https://github.com/thomaslaurenson/Vestigium')
     print('       Now Exiting...') 
     sys.exit(1)
-    
+
+################################################################################
 # Initialize the file path normalizer object
 file_path_normalizer = FilePathNormalizer.FilePathNormalizer()
 
@@ -93,6 +94,7 @@ cell_path_normalizer = CellPathNormalizer.CellPathNormalizer()
 dfxml = Objects.DFXMLObject()
 regxml = Objects.RegXMLObject() 
 
+################################################################################
 def normalise_all(apxml_obj):
     for obj in apxml_obj:
         if isinstance(obj, Objects.FileObject):
@@ -110,6 +112,8 @@ def normalise_all(apxml_obj):
             # LiveDiff stores SHA-1 hashes in uppercase, convert to lower
             if obj.sha1 is not None:
                 obj.sha1 = obj.sha1.lower()
+                
+            # Set the application name
             obj.app_name = apxml_obj.metadata.app_name     
             
             # Add a orphan_name to only unallocated files
@@ -132,8 +136,14 @@ def normalise_all(apxml_obj):
                 normbasename = file_path_normalizer.normalize(obj.basename)
                 normbasename = normbasename.replace('/', '\\')
                 obj.basename_norm = normbasename
-                obj.cellpath_norm = obj.cellpath_norm.replace(obj.basename, obj.basename_norm)               
+                obj.cellpath_norm = obj.cellpath_norm.replace(obj.basename, obj.basename_norm)
+                
+            # Set the application name
+            obj.app_name = apxml_obj.metadata.app_name 
+                  
+            # All done, append to RegXMLObject                   
             regxml.append(obj)
+            
                 
 def apxml_output(apxml_obj, fn):
     # Reconstruct APXML document
@@ -166,8 +176,6 @@ def apxml_output(apxml_obj, fn):
         #f.write("<?xml version='1.0' encoding='UTF-16' ?>")
         f.write(apxml_report)        
         
-            
-            
 ################################################################################
 if __name__=='__main__':
     import argparse
