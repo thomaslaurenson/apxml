@@ -224,17 +224,6 @@ class APXMLObject(object):
     def to_apxml(self):
         """ Write an APXMLObject to XML. """
         return _ET_tostring(self.to_Element())
-
-    def objs_to_Element(self, state):
-        #outel = ET.Element(state)
-        outel = ET.Element()
-        for fi in self._files:
-            if fi.app_state == state:
-                outel.append(fi.to_Element())
-        for cell in self._cells:
-            if cell.app_state == state:
-                outel.append(cell.to_Element())                
-        return outel
     
     # version setter and getter
     @property
