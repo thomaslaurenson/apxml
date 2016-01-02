@@ -25,16 +25,21 @@ class Intersection(object):
         # and CellObjects found in the APXML documents
         self.dfxml_obj = Objects.DFXMLObject()
         self.regxml_obj = Objects.RegXMLObject()
+        
+        # Keep record of profile name for output
+        self.out_fn = os.path.basename(profilesList[0])
+        self.out_fn = os.path.splitext(self.out_fn)[0]
 
         # Parse each APXML file to a OrderedDict
         for i, profile in enumerate(profilesList):
             print("  > %s" % profile)
             apxml_obj = apxml.iterparse(profile)
             apxml.generate_stats(apxml_obj)
+            # Split the file system path for the application profile
             name = profile.split('/')
-            name = name[len(name) - 1]
-            name = name.split("-")[0]
-        
+            name = name[0]
+            #name = name[len(name) - 1]
+            #name = name.split("-")[0]
             apxml_obj.name = name
             self.profileList.append(apxml_obj)
 
@@ -227,7 +232,7 @@ class Intersection(object):
         xml_fi = xml.dom.minidom.parse(temp_fi)
         apxml_report = xml_fi.toprettyxml(indent="  ")
         # Set the file output name
-        fn = "n" + str(count) + ".apxml"
+        fn = self.out_fn + "-n" + str(count) + "-INTERSECTION.apxml"
         # Write out APXML document
         with open(fn, "w", encoding="utf-16-le") as f:
             #f.write("<?xml version='1.0' encoding='UTF-16' ?>")
