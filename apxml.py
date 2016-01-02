@@ -4,7 +4,7 @@
 Author:  Thomas Laurenson
 Email:   thomas@thomaslaurenson.com
 Website: thomaslaurenson.com
-Date:    2015/12/31
+Date:    2016/01/03
 
 Description:
 The apxml.py Python module is an Application Programming Interface (API)
@@ -152,10 +152,7 @@ class APXMLObject(object):
         # Statistics object to store APXML file stats
         self.stats = StatisticsObject()
 
-    _all_properties = set(["fileobject",
-                           "cellobject"])
-                           
-    _all_states = collections.OrderedDict()
+        self._all_states = collections.OrderedDict()
 
     def __iter__(self):
         """ Yields all FileObjects and CellObjects attached to this APXMLObject. """
