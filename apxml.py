@@ -155,7 +155,7 @@ class APXMLObject(object):
     _all_properties = set(["fileobject",
                            "cellobject"])
                            
-    _all_states = set()
+    _all_states = collections.OrderedDict()
 
     def __iter__(self):
         """ Yields all FileObjects and CellObjects attached to this APXMLObject. """
@@ -207,21 +207,13 @@ class APXMLObject(object):
         outel.append(tmpel0)
 
         # Write FileObjects and CellObjects to APXML document
-        
-            
-
-        # Append life cycle phases?!
-        # Append FileObjects
-        # Append CellObjects
-        tmpel0 = self.objs_to_Element("install")
-        tmpel1 = self.objs_to_Element("open")
-        tmpel2 = self.objs_to_Element("close")
-        tmpel3 = self.objs_to_Element("uninstall")
-
-        outel.append(tmpel0)
-        outel.append(tmpel1)
-        outel.append(tmpel2)
-        outel.append(tmpel3)
+        for state in self._all_states:
+            for fi in self._files:
+                if fi.app_state == state:
+                    outel.append(fi.to_Element())
+            for cell in self._cells:
+                if cell.app_state == state:
+                    outel.append(cell.to_Element()) 
 
         # Set Rusage element
         tmpel0 = self.rusage.to_Element()
@@ -233,13 +225,14 @@ class APXMLObject(object):
         """ Write an APXMLObject to XML. """
         return _ET_tostring(self.to_Element())
 
-    def objs_to_Element(self, phase):
-        outel = ET.Element(phase)
+    def objs_to_Element(self, state):
+        #outel = ET.Element(state)
+        outel = ET.Element()
         for fi in self._files:
-            if fi.app_state == phase:
+            if fi.app_state == state:
                 outel.append(fi.to_Element())
         for cell in self._cells:
-            if cell.app_state == phase:
+            if cell.app_state == state:
                 outel.append(cell.to_Element())                
         return outel
     
@@ -617,13 +610,13 @@ def iterparse(filename, events=("start", "end"), **kwargs):
                 fo = Objects.FileObject()
                 fo.populate_from_Element(elem)
                 apxml.append(fo)
-                apxml._all_states.add(fo.app_state)
+                apxml._all_states[fo.app_state] = None
                     
             elif ln == "cellobject":
                 co = Objects.CellObject()
                 co.populate_from_Element(elem)
                 apxml.append(co)
-                apxml._all_states.add(co.app_state)                    
+                apxml._all_states[co.app_state] = None  
 
     # All done, return the APXMLObject
     return apxml
