@@ -1,9 +1,42 @@
+#!/usr/bin/env python3
+
+"""
+Author:  Thomas Laurenson
+Email:   thomas@thomaslaurenson.com
+Website: thomaslaurenson.com
+Date:    2016/01/04
+
+Description:
+The APXML2CSV.py Python module converts an APXML document to CSV format.
+
+Copyright (c) 2016, Thomas Laurenson
+
+###############################################################################
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+###############################################################################
+
+>>> CHANGELOG:
+    0.1.0       Base functionality ()
+
+"""
+
 import os
 
 try:
     import dfxml
 except ImportError:
-    print("Error: apxml.py")
+    print("Error: APXML2CSV.py")
     print("       The dfxml.py module is required to run this script")
     print("       You can download from: https://github.com/simsong/dfxml")
     print("       Now Exiting...")
@@ -12,7 +45,7 @@ except ImportError:
 try:
     import Objects
 except ImportError:
-    print("Error: apxml.py")
+    print("Error: APXML2CSV.py")
     print("       The Objects.py module is required to run this script")
     print("       You can download from: https://github.com/thomaslaurenson/apxml")
     print("       Now Exiting...")
@@ -21,7 +54,7 @@ except ImportError:
 try:
     import apxml
 except ImportError:
-    print("Error: apxml.py")
+    print("Error: APXML2CSV.py")
     print("       The apxml.py module is required to run this script")
     print("       You can download from: https://github.com/thomaslaurenson/apxml")
     print("       Now Exiting...")

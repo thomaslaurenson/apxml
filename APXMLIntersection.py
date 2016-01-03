@@ -1,18 +1,68 @@
+#!/usr/bin/env python3
+
+"""
+Author:  Thomas Laurenson
+Email:   thomas@thomaslaurenson.com
+Website: thomaslaurenson.com
+Date:    2016/01/04
+
+Description:
+The APXMLIntersection.py Python module takes an APXML document as input
+and normalises FileObjects and CellObjects properties.
+
+Copyright (c) 2016, Thomas Laurenson
+
+###############################################################################
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+###############################################################################
+
+>>> CHANGELOG:
+    0.1.0       Base functionality ()
+
+"""
+
 import os
 import sys
 import io
-import apxml
-import collections
 import xml.dom.minidom
+    
+try:
+    import dfxml
+except ImportError:
+    print("Error: APXMLIntersection.py")
+    print("       The dfxml.py module is required to run this script")
+    print("       You can download from: https://github.com/simsong/dfxml")
+    print("       Now Exiting...")
+    sys.exit(1)
 
 try:
     import Objects
 except ImportError:
     print("Error: APXMLIntersection.py")
     print("       The Objects.py module is required to run this script")
-    print("       You can download from: https://github.com/simsong/dfxml")
+    print("       You can download from: https://github.com/thomaslaurenson/apxml")
     print("       Now Exiting...")
     sys.exit(1)
+
+try:
+    import apxml
+except ImportError:
+    print("Error: APXMLIntersection.py")
+    print("       The apxml.py module is required to run this script")
+    print("       You can download from: https://github.com/thomaslaurenson/apxml")
+    print("       Now Exiting...")
+    sys.exit(1)    
 
 ################################################################################
 # Intersection object
@@ -66,7 +116,7 @@ class Intersection(object):
                 self.profileList.append(l)
 
     def first_pass(self):
-        """ Process the first profile """
+        """ Process the first profile. """
         self.order.append(self.profileList[0])
         for obj in self.profileList[0]:
             if isinstance(obj, Objects.FileObject):
@@ -77,6 +127,7 @@ class Intersection(object):
                 self.regxml_obj.append(obj)
 
     def next_pass(self, count):
+        """ Prcoess each subsequent profile. """
         self.order.append(self.profileList[count])
         for obj in self.profileList[count]:
             match = False
@@ -180,7 +231,7 @@ class Intersection(object):
               "{:,}".format(cALL)))
 
     def csv_output(self, count):
-        # Create CSV for intersected entries
+        """ Create CSV output for intersected entries. """
         count += 1
         files_csv = "n" + str(count) + "_FILES.csv"
         cells_csv = "n" + str(count) + "_CELLS.csv"
@@ -211,7 +262,8 @@ class Intersection(object):
                                                        co.data))
 
     def apxml_output(self, count):
-        # Reconstruct APXML document
+        """ Create APXML output for intersected entries. """    
+
         apxml_out = self.profileList[0]
 
         # Remove all files and cells from APXMLObject

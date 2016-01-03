@@ -4,14 +4,14 @@
 Author:  Thomas Laurenson
 Email:   thomas@thomaslaurenson.com
 Website: thomaslaurenson.com
-Date:    2015/12/31
+Date:    2016/01/04
 
 Description:
 The APXMLPreProcess.py Python module takes an APXML document as input
 and pre-processes the document for processing against a target data
 set.
 
-Copyright (c) 2015, Thomas Laurenson
+Copyright (c) 2016, Thomas Laurenson
 
 ###############################################################################
 This program is free software: you can redistribute it and/or modify
@@ -41,7 +41,7 @@ import xml.dom.minidom
 try:
     import dfxml
 except ImportError:
-    print("Error: apxml.py")
+    print("Error: APXMLPreProcess.py")
     print("       The dfxml.py module is required to run this script")
     print("       You can download from: https://github.com/simsong/dfxml")
     print("       Now Exiting...")
@@ -50,7 +50,7 @@ except ImportError:
 try:
     import Objects
 except ImportError:
-    print("Error: apxml.py")
+    print("Error: APXMLPreProcess.py")
     print("       The Objects.py module is required to run this script")
     print("       You can download from: https://github.com/thomaslaurenson/apxml")
     print("       Now Exiting...")
@@ -59,7 +59,7 @@ except ImportError:
 try:
     import apxml
 except ImportError:
-    print("Error: apxml.py")
+    print("Error: APXMLPreProcess.py")
     print("       The apxml.py module is required to run this script")
     print("       You can download from: https://github.com/thomaslaurenson/apxml")
     print("       Now Exiting...")
@@ -68,7 +68,7 @@ except ImportError:
 try:
     import FilePathNormalizer
 except ImportError:
-    print('Error: APXMLFinalise.py')
+    print('Error: APXMLPreProcess.py')
     print('       The FilePathNormalizer.py module is required.')
     print('       You can download from: https://github.com/thomaslaurenson/Vestigium')
     print('       Now Exiting...')
@@ -77,7 +77,7 @@ except ImportError:
 try:
     import CellPathNormalizer
 except ImportError:
-    print('Error: APXMLFinalise.py')
+    print('Error: APXMLPreProcess.py')
     print('       The CellPathNormalizer.py module is required.')
     print('       You can download from: https://github.com/thomaslaurenson/Vestigium')
     print('       Now Exiting...')
