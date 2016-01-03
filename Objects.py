@@ -2714,6 +2714,11 @@ class CellObject(object):
                 self.data = ce.text
                 if ce.attrib.get("encoding"):
                     self.data_encoding = ce.attrib["encoding"]
+            # TL: Added data encoding set directly from XML tag
+            # This is different from above, where encoding in an XML attribute in
+            # this data tag
+            elif ctn == "data_encoding":
+                self.data_encoding = ce.text
             # TL: Added raw data element to be populated
             elif ctn == "data_raw":
                 self.data_raw = ce.text                  
