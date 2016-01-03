@@ -71,7 +71,7 @@ except ImportError:
     print('Error: APXMLFinalise.py')
     print('       The FilePathNormalizer.py module is required.')
     print('       You can download from: https://github.com/thomaslaurenson/Vestigium')
-    print('       Now Exiting...') 
+    print('       Now Exiting...')
     sys.exit(1)
 
 try:
@@ -80,7 +80,7 @@ except ImportError:
     print('Error: APXMLFinalise.py')
     print('       The CellPathNormalizer.py module is required.')
     print('       You can download from: https://github.com/thomaslaurenson/Vestigium')
-    print('       Now Exiting...') 
+    print('       Now Exiting...')
     sys.exit(1)
 
 ################################################################################
@@ -92,7 +92,7 @@ cell_path_normalizer = CellPathNormalizer.CellPathNormalizer()
 
 # Create DFMXL and RegXML Objects to store information
 dfxml = Objects.DFXMLObject()
-regxml = Objects.RegXMLObject() 
+regxml = Objects.RegXMLObject()
 
 ################################################################################
 def normalise_all(apxml_obj):
@@ -101,10 +101,10 @@ def normalise_all(apxml_obj):
             # Add basename to FileObject
             basename = obj.filename.split("\\")
             obj.basename = basename[len(basename) - 1]
-            
+
             # Normalize the file path and append to FileObject
-            obj.filename_norm = file_path_normalizer.normalize(obj.filename) 
-            
+            obj.filename_norm = file_path_normalizer.normalize(obj.filename)
+
             # Use filename_norm to extract basename_norm
             basename_norm = obj.filename_norm.split("/")
             obj.basename_norm = basename_norm[len(basename_norm) - 1]
@@ -112,24 +112,24 @@ def normalise_all(apxml_obj):
             # LiveDiff stores SHA-1 hashes in uppercase, convert to lower
             if obj.sha1 is not None:
                 obj.sha1 = obj.sha1.lower()
-                
+
             # Set the application name
-            obj.app_name = apxml_obj.metadata.app_name     
-            
+            obj.app_name = apxml_obj.metadata.app_name
+
             # Add a orphan_name to only unallocated files
             if not obj.is_allocated() and obj.meta_type == 1:
                 split = obj.filename.split("\\")
-                obj.orphan_name = "$OrphanFiles/" + split[len(split) - 1]            
-            
+                obj.orphan_name = "$OrphanFiles/" + split[len(split) - 1]
+
             # All done, append to DFXMLObject
             dfxml.append(obj)
-                        
-        elif isinstance(obj, Objects.CellObject):           
+
+        elif isinstance(obj, Objects.CellObject):
             # Normalize the cell path
             obj.cellpath_norm = cell_path_normalizer.normalize_profile_co(obj.cellpath)
             rootkey = obj.cellpath_norm.split("\\")[0]
             obj.cellpath_norm = cell_path_normalizer.normalize_target_co(obj.cellpath_norm, rootkey)
-                    
+
             # Normalize the basename
             obj.basename_norm = None
             if obj.basename and obj.basename.startswith("C:"):
@@ -137,14 +137,14 @@ def normalise_all(apxml_obj):
                 normbasename = normbasename.replace('/', '\\')
                 obj.basename_norm = normbasename
                 obj.cellpath_norm = obj.cellpath_norm.replace(obj.basename, obj.basename_norm)
-                
+
             # Set the application name
-            obj.app_name = apxml_obj.metadata.app_name 
-                  
-            # All done, append to RegXMLObject                   
+            obj.app_name = apxml_obj.metadata.app_name
+
+            # All done, append to RegXMLObject
             regxml.append(obj)
-            
-                
+
+
 def apxml_output(apxml_obj, fn):
     # Reconstruct APXML document
     apxml_out = apxml_obj
@@ -152,7 +152,7 @@ def apxml_output(apxml_obj, fn):
     # Set the output filename based on profile
     fn = os.path.basename(fn)
     fn = os.path.splitext(fn)[0]
-    
+
     # Remove all files and cells from APXMLObject
     del apxml_out._files[:]
     del apxml_out._cells[:]
@@ -170,23 +170,23 @@ def apxml_output(apxml_obj, fn):
     apxml_report = xml_fi.toprettyxml(indent="  ")
     # Set the file output name
     out_fi = fn + "-NORM.apxml"
-    
+
     # Write out APXML document
     with open(out_fi, "w", encoding="utf-16-le") as f:
         #f.write("<?xml version='1.0' encoding='UTF-16' ?>")
-        f.write(apxml_report)        
-        
+        f.write(apxml_report)
+
 ################################################################################
 if __name__=='__main__':
     import argparse
     parser = argparse.ArgumentParser(description='''APXMLPreProcess.py''',
 formatter_class = argparse.RawTextHelpFormatter)
     parser.add_argument('profile',
-                        help = 'Application Profile XML (APXML)')              
+                        help = 'Application Profile XML (APXML)')
     args = parser.parse_args()
 
     apxml_obj = apxml.iterparse(args.profile)
     apxml.generate_stats(apxml_obj)
 
-    normalise_all(apxml_obj) 
-    apxml_output(apxml_obj, args.profile) 
+    normalise_all(apxml_obj)
+    apxml_output(apxml_obj, args.profile)

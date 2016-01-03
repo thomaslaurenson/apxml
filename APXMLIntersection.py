@@ -20,12 +20,12 @@ class Intersection(object):
     def __init__(self, profilesList):
         self.profileList = list()
         self.order = list()
-        
+
         # DFXML and RegXML Objects to store FileObjects
         # and CellObjects found in the APXML documents
         self.dfxml_obj = Objects.DFXMLObject()
         self.regxml_obj = Objects.RegXMLObject()
-        
+
         # Keep record of profile name for output
         self.out_fn = os.path.basename(profilesList[0])
         self.out_fn = os.path.splitext(self.out_fn)[0]
@@ -58,13 +58,13 @@ class Intersection(object):
             low.sort(key=lambda x: x.stats.all, reverse=False)
             high.sort(key=lambda x: x.stats.all, reverse=True)
             low = low[0:10]
-            high = high[0:10]                       
+            high = high[0:10]
 
             del self.profileList[:]
             for (h, l) in zip(high, low):
                 self.profileList.append(h)
                 self.profileList.append(l)
-        
+
     def first_pass(self):
         """ Process the first profile """
         self.order.append(self.profileList[0])
@@ -117,7 +117,7 @@ class Intersection(object):
                     fi1.alloc_name == fi2.alloc_name and
                     fi1.annos == fi2.annos and
                     fi1.app_state == fi2.app_state)
-        
+
         elif fi1.filename.endswith(".pf"):
             # Normalize Prefetch file for comparison, e.g.,
             # Before: C:\Windows\Prefetch\TRUECRYPT.EXE-009A2E5A.pf
@@ -132,8 +132,8 @@ class Intersection(object):
                     fi1.alloc_name == fi2.alloc_name and
                     fi1.annos == fi2.annos and
                     fi1.app_state == fi2.app_state)
-        
-        # Default is to compare all object properties            
+
+        # Default is to compare all object properties
         return (fi1.filename == fi2.filename and
                 fi1.meta_type == fi2.meta_type and
                 fi1.sha1 == fi2.sha1 and
@@ -247,7 +247,7 @@ formatter_class = argparse.RawTextHelpFormatter)
                         help = 'Application Profiles XML (APXML)',
                         nargs='+')
     parser.add_argument('mode',
-                        help = 'How to store APXML order (none, lowest, highest, stacked)')                        
+                        help = 'How to store APXML order (none, lowest, highest, stacked)')
     args = parser.parse_args()
 
     obj = Intersection(args.profiles)

@@ -26,12 +26,12 @@ except ImportError:
     print("       You can download from: https://github.com/thomaslaurenson/apxml")
     print("       Now Exiting...")
     sys.exit(1)
-    
-################################################################################    
+
+################################################################################
 def make_csv_files(files):
     # Create CSV for file system entries
     files_csv = "files.csv"
-    
+
     with open(files_csv, 'w') as f:
         f.write("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n" % ("app_name",
                                                            "app_state",
@@ -58,11 +58,11 @@ def make_csv_files(files):
                                                                fi.alloc_name,
                                                                fi.alloc_inode,
                                                                fi.sha1))
-                                                               
+
 def make_csv_cells(cells):
     # Create CSV for Registry entries
     cells_csv = "cells.csv"
-    
+
     with open(cells_csv, 'w') as f:
         f.write("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n" % ("app_name",
                                                         "app_state",
@@ -86,16 +86,16 @@ def make_csv_cells(cells):
                                                             co.alloc,
                                                             co.data_type,
                                                             co.data,
-                                                            co.data_raw))     
+                                                            co.data_raw))
 
-    
+
 ################################################################################
 if __name__=='__main__':
     import argparse
     parser = argparse.ArgumentParser(description='''APXML2CSV.py''',
 formatter_class = argparse.RawTextHelpFormatter)
     parser.add_argument('profile',
-                        help = 'Application Profile XML (APXML)')                       
+                        help = 'Application Profile XML (APXML)')
     args = parser.parse_args()
 
     files = list()
@@ -108,6 +108,6 @@ formatter_class = argparse.RawTextHelpFormatter)
             files.append(obj)
         if isinstance(obj, Objects.CellObject):
             cells.append(obj)
-            
+
     make_csv_files(files)
     make_csv_cells(cells)
