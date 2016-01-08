@@ -2,9 +2,9 @@
 
 APXML is a forensic data abstraction deisgned to store digital artifacts (directories, data files, Registry keys and Registry values) associated with application software. A Python API (apxml.py) is provided to automate processing of the contents of APXML documents. This repository also contains a varity of sample programs to automate processing of APXML documents.
 
-## Applicatoin Profile XML (APXML)
+## Application Profile XML (APXML)
 
-Application Profile XML (APXML) is a hybrid forensic data abstraction based on Digital Forensic XML (DFXML) and Registry XML (RegXML). The overall structure of an APXML document displayed in the following code snippet:
+Application Profile XML (APXML) is a hybrid data abstraction based on Digital Forensic XML (DFXML) and Registry XML (RegXML) forensic data abstractions. The overall structure of an APXML document displayed in the following code snippet:
 
 ```
 <apxml>
@@ -16,7 +16,42 @@ Application Profile XML (APXML) is a hybrid forensic data abstraction based on D
 </apxml>
 ```
 
-Basically, APXML stored file system entries as DFXML FileObjects and Windows Registry entries as RegXML CellObjects.
+Basically, APXML stores file system entries as DFXML FileObjects and Windows Registry entries as RegXML CellObjects. Additional metadata, creator and rusage XML elements store application profile information.
+
+Example of a populated FileObject:
+
+```
+  <fileobject delta:new_file="1">
+    <filename>C:\Program Files\TrueCrypt\TrueCrypt Setup.exe</filename>
+    <filename_norm>%PROGRAMFILES%/TrueCrypt/TrueCrypt Setup.exe</filename_norm>
+    <basename>TrueCrypt Setup.exe</basename>
+    <basename_norm>TrueCrypt Setup.exe</basename_norm>
+    <filesize>3466248</filesize>
+    <alloc_inode>1</alloc_inode>
+    <alloc_name>1</alloc_name>
+    <meta_type>1</meta_type>
+    <hashdigest type="sha1">7689d038c76bd1df695d295c026961e50e4a62ea</hashdigest>
+    <app_name>TrueCrypt</app_name>
+    <app_state>install</app_state>
+  </fileobject>
+```
+
+Example of a populated CellObject:
+
+```
+  <cellobject delta:new_cell="1">
+    <cellpath>HKLM\SOFTWARE\Classes\.tc\(Default)</cellpath>
+    <cellpath_norm>SOFTWARE\Classes\.tc\(Default)</cellpath_norm>
+    <basename>(Default)</basename>
+    <name_type>v</name_type>
+    <alloc>1</alloc>
+    <data_type>REG_SZ</data_type>
+    <data>TrueCryptVolume</data>
+    <data_raw>54 00 72 00 75 00 65 00 43 00 72 00 79 00 70 00 74 00 56 00 6F 00 6C 00 75 00 6D 00 65 00 00 00</data_raw>
+    <app_name>TrueCrypt</app_name>
+    <app_state>install</app_state>
+  </cellobject>
+```
 
 ## Generating APXML Documents
 
