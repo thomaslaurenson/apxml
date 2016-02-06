@@ -1749,28 +1749,49 @@ class FileObject(object):
     def compare_to_original(self):
         self._diffs = self.compare_to_other(self.original_fileobject, True)
 
-    def compare_to_other(self, other, ignore_original=False, ignore_properties=set()):
+    def compare_to_other(self, other, ignore_original=False, ignore_properties=set(), check_properties=set()):
         _typecheck(other, FileObject)
 
         diffs = set()
-
-        for propname in FileObject._all_properties:
-            if propname in FileObject._incomparable_properties:
-                continue
-            if ignore_original and propname == "original_fileobject":
-                continue
-            # TL: Added ignore_properties check
-            # Can pass a set() of properties to ignore
-            # e.g., {"filename", "sha1"}
-            if propname in ignore_properties:
-                continue
-            oval = getattr(other, propname)
-            sval = getattr(self, propname)
-            if oval is None and sval is None:
-                continue
-            if oval != sval:
-                #_logger.debug("propname, oval, sval: %r, %r, %r" % (propname, oval, sval))
-                diffs.add(propname)
+        
+        # TL: Added support to specify a set of poperties to compare
+        if check_properties:
+            print("HERE")
+            for propname in check_properties:
+                if propname in FileObject._incomparable_properties:
+                    continue
+                if ignore_original and propname == "original_fileobject":
+                    continue
+                # TL: Added ignore_properties check
+                # Can pass a set() of properties to ignore
+                # e.g., {"filename", "sha1"}
+                if propname in ignore_properties:
+                    continue
+                oval = getattr(other, propname)
+                sval = getattr(self, propname)
+                if oval is None and sval is None:
+                    continue
+                if oval != sval:
+                    #_logger.debug("propname, oval, sval: %r, %r, %r" % (propname, oval, sval))
+                    diffs.add(propname)
+        else:        
+            for propname in FileObject._all_properties:
+                if propname in FileObject._incomparable_properties:
+                    continue
+                if ignore_original and propname == "original_fileobject":
+                    continue
+                # TL: Added ignore_properties check
+                # Can pass a set() of properties to ignore
+                # e.g., {"filename", "sha1"}
+                if propname in ignore_properties:
+                    continue
+                oval = getattr(other, propname)
+                sval = getattr(self, propname)
+                if oval is None and sval is None:
+                    continue
+                if oval != sval:
+                    #_logger.debug("propname, oval, sval: %r, %r, %r" % (propname, oval, sval))
+                    diffs.add(propname)
 
         return diffs
 
