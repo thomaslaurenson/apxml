@@ -553,14 +553,12 @@ def generate_stats(apxml_obj):
             # Process Registry key
             if obj.name_type == "k":
                 apxml_obj.stats.keys += 1
-                apxml_obj.stats.dirs += 1
                 for delta in obj.annos:
                     apxml_obj.stats._keys[obj.app_state].append(delta)
 
             # Process Registry value
             elif obj.name_type == "v":
                 apxml_obj.stats.values += 1
-                apxml_obj.stats.dirs += 1
                 for delta in obj.annos:
                     apxml_obj.stats._values[obj.app_state].append(delta)
 
