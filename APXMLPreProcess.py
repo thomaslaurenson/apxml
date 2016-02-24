@@ -148,7 +148,7 @@ def normalise_all(apxml_obj):
                 if normbasename.startswith("C:"):
                     normbasename = file_path_normalizer.normalize(normbasename)
                     normbasename = normbasename.replace('/', '\\')
-                    obj.basename_norm = normbasename
+                    obj.basename_norm = normbasename.lower()
                     obj.cellpath_norm = obj.cellpath_norm.replace(obj.basename.lower(), obj.basename_norm)
                     
             # Set the application name
@@ -157,18 +157,14 @@ def normalise_all(apxml_obj):
             # All done, append to RegXMLObject
             regxml.append(obj)
 
-def apxml_output(apxml_obj, fn):
+def apxml_output(apxml_obj, fn, output = False):
     # Reconstruct APXML document
     apxml_out = apxml_obj
-
-    # Set the output filename based on profile
-    fn = os.path.basename(fn)
-    fn = os.path.splitext(fn)[0]
 
     # Remove all files and cells from APXMLObject
     del apxml_out._files[:]
     del apxml_out._cells[:]
-
+    
     # Append files and cells to new APXML
     for fi in dfxml:
         apxml_out.append(fi)
@@ -180,8 +176,14 @@ def apxml_output(apxml_obj, fn):
     # Format APXML using minidom
     xml_fi = xml.dom.minidom.parse(temp_fi)
     apxml_report = xml_fi.toprettyxml(indent="  ")
-    # Set the file output name
-    out_fi = fn + "-NORM.apxml"
+    
+    if output:
+        out_fi = fn
+    else:
+        # Set the output filename based on profile
+        fn = os.path.basename(fn)
+        fn = os.path.splitext(fn)[0]
+        out_fi = fn + "-NORM.apxml"
 
     # Write out APXML document
     with open(out_fi, "w", encoding="utf-16-le") as f:
@@ -195,10 +197,21 @@ if __name__=='__main__':
 formatter_class = argparse.RawTextHelpFormatter)
     parser.add_argument('profile',
                         help = 'Application Profile XML (APXML)')
+    parser.add_argument('-o',
+                        help = 'APXML Output',
+                        action = 'store',
+                        required = False,)
     args = parser.parse_args()
 
+    # Read the APXML profile, then generate stats
     apxml_obj = apxml.iterparse(args.profile)
     apxml.generate_stats(apxml_obj)
 
+    # Normalise the APXML document and all entries
     normalise_all(apxml_obj)
-    apxml_output(apxml_obj, args.profile)
+    
+    # Generate APXML output (the normalised profile)
+    if args.o:
+        apxml_output(apxml_obj, args.o, output = True)
+    else:
+        apxml_output(apxml_obj, args.profile)
