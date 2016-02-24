@@ -130,7 +130,10 @@ def normalise_all(apxml_obj):
             obj.cellpath_norm = cell_path_normalizer.normalize_profile_co(obj.cellpath)
             rootkey = obj.cellpath_norm.split("\\")[0]
             obj.cellpath_norm = cell_path_normalizer.normalize_target_co(obj.cellpath_norm, rootkey)
+            
+            # Set cellpath_norm to lower case (Registry paths are not case sensitive)
             obj.cellpath_norm = obj.cellpath_norm.lower()
+            
             # Normalize the basename
             obj.basename_norm = None
             if obj.basename and obj.basename.startswith("C:"):
@@ -138,22 +141,21 @@ def normalise_all(apxml_obj):
                 normbasename = normbasename.replace('/', '\\')
                 obj.basename_norm = normbasename
                 obj.cellpath_norm = obj.cellpath_norm.replace(obj.basename, obj.basename_norm)
+            
             elif obj.basename and obj.basename.startswith("P:"):
                 # Decrypt user assist entry and normalise
                 normbasename = codecs.decode(obj.basename, "rot_13")
-                print(normbasename)
                 if normbasename.startswith("C:"):
                     normbasename = file_path_normalizer.normalize(normbasename)
                     normbasename = normbasename.replace('/', '\\')
                     obj.basename_norm = normbasename
-                    obj.cellpath_norm = obj.cellpath_norm.replace(obj.basename, obj.basename_norm)
+                    obj.cellpath_norm = obj.cellpath_norm.replace(obj.basename.lower(), obj.basename_norm)
                     
             # Set the application name
             obj.app_name = apxml_obj.metadata.app_name
 
             # All done, append to RegXMLObject
             regxml.append(obj)
-
 
 def apxml_output(apxml_obj, fn):
     # Reconstruct APXML document
