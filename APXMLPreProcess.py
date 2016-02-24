@@ -35,6 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
 import io
+import codecs
 import collections
 import xml.dom.minidom
 
@@ -137,7 +138,16 @@ def normalise_all(apxml_obj):
                 normbasename = normbasename.replace('/', '\\')
                 obj.basename_norm = normbasename
                 obj.cellpath_norm = obj.cellpath_norm.replace(obj.basename, obj.basename_norm)
-
+            elif obj.basename and obj.basename.startswith("P:"):
+                # Decrypt user assist entry and normalise
+                normbasename = codecs.decode(obj.basename, "rot_13")
+                print(normbasename)
+                if normbasename.startswith("C:"):
+                    normbasename = file_path_normalizer.normalize(normbasename)
+                    normbasename = normbasename.replace('/', '\\')
+                    obj.basename_norm = normbasename
+                    obj.cellpath_norm = obj.cellpath_norm.replace(obj.basename, obj.basename_norm)
+                    
             # Set the application name
             obj.app_name = apxml_obj.metadata.app_name
 
