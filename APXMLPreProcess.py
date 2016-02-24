@@ -129,7 +129,7 @@ def normalise_all(apxml_obj):
             obj.cellpath_norm = cell_path_normalizer.normalize_profile_co(obj.cellpath)
             rootkey = obj.cellpath_norm.split("\\")[0]
             obj.cellpath_norm = cell_path_normalizer.normalize_target_co(obj.cellpath_norm, rootkey)
-
+            obj.cellpath_norm = obj.cellpath_norm.lower()
             # Normalize the basename
             obj.basename_norm = None
             if obj.basename and obj.basename.startswith("C:"):
