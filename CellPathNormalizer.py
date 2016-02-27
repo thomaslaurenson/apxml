@@ -64,49 +64,73 @@ class CellPathNormalizer():
             normpath = "NTUSER.DAT\\" + normpath
         return normpath
 
-    def normalize_target_co_rootkey(self, cellpath, rootkey):
+    def normalize_rootkey(self, cellpath, rootkey):
         """
         Normalize the cellpath rootkey of the Target CellObject (TCO), e.g.,
         Before: CMI-CreateHive{F10156BE-0E87-4EFB-969E-5DA29D131144}\ControlSet001\
         After:  SYSTEM\ControlSet001\
         """
+        # Normalise hive rootkey, or return if None
         if cellpath:
             normpath = cellpath.split("\\")
             normpath[0] = rootkey
             normpath = "\\".join(normpath)
             return normpath
+        else:
+            return cellpath
 
-    def normalize_target_co(self, cellpath, rootkey):
+    def normalize_cellpath(self, cellpath, rootkey):
         """ Normalize the cellpath of the Target CellObject (TCO). """
+        
+        # Split a cellpath on backslashes, or return if None
         if cellpath:
             normpath = cellpath.split("\\")
         else:
             return cellpath
 
-        #if rootkey == "NTUSER.DAT":
-        #    if len(normpath) >= 2:
-        #        normpath[1] = "%SID%"
-
-        # Normalise SYSTEM Registry hive cellpath
-        if rootkey == "SYSTEM":
-            control_names = ["ControlSet001",
-                             "ControlSet002",
-                             "ControlSet003",
-                             "CurrentControlSet",
-                             "Clone"]
+        # System hive normalisation
+        if rootkey == "system":
+            control_names = ["controlset001",
+                             "controlset002",
+                             "controlset003",
+                             "currentcontrolset",
+                             "clone"]
             # If path has "control set" name, normalise target path
             # See: http://support.microsoft.com/kb/100010
             #for name in control_names:
             if len(normpath) >= 2:
                 if normpath[1] in control_names:
-                    normpath[1] = "%CONTROLSET%"
+                    normpath[1] = "%controlset%"
 
+        # Join the split normalised path and return
         normpath = "\\".join(normpath)
         return normpath
 
     def normalize_basename(self, basename):
         """ If the basename is a path, normalize using the normalize function
             from the FilePathNormalizer module. """
-        norm_basename = basename[3:].replace('\\', '/')
-        norm_basename = self.file_path_normalizer.normalize(norm_basename)
-        return norm_basename
+       
+        basename_norm = None
+        
+        # Decrypt a UserAssist entry ('P:' equates to 'C:' using rot13) 
+        if basename.startswith("P:"):
+            basename_norm = codecs.decode(obj.basename, "rot_13")
+   
+        # Strip UserAssist prefix in older windows versions
+        elif basename.startswith("HRZR_EHACNGU"):
+            basename_norm = basename[12:]
+        
+        else:
+            basename_norm = basename
+    
+        # If basename_norm starts with C:
+        if basename_norm.startswith("C:"):
+            basename_norm = basename_norm[3:]
+        
+        # Replace backslash with forward slash
+        basename_norm = basename_norm.replace('\\', '/')
+        
+        # Now normlaise using file path normaliser modules
+        basename_norm = self.file_path_normalizer.normalize(basename_norm)
+
+        return basename_norm
