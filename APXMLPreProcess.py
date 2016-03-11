@@ -129,7 +129,7 @@ def normalise_all(apxml_obj):
             # Normalize the cell path
             obj.cellpath_norm = cell_path_normalizer.normalize_profile_co(obj.cellpath)
             rootkey = obj.cellpath_norm.split("\\")[0]
-            obj.cellpath_norm = cell_path_normalizer.normalize_target_co(obj.cellpath_norm, rootkey)
+            obj.cellpath_norm = cell_path_normalizer.normalize_cellpath(obj.cellpath_norm, rootkey)
             
             # Set cellpath_norm to lower case (Registry paths are not case sensitive)
             obj.cellpath_norm = obj.cellpath_norm.lower()
